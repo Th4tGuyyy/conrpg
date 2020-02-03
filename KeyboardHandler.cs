@@ -32,20 +32,25 @@ namespace rpgtest2020
 			add(key, action, new Timer(cooldown));
 		}
 
-		public void handle()
+		public bool handle()
 		{
+			bool action = false;
+
 			for(int i =0; i < keyList.Count; i++) {
 
 
 				if(GAME.Engine.GetKey(keyList[i].key) && keyList[i].timer.complete()) {
 					keyList[i].timer.start();
 					keyList[i].action();
+					action = true;
 				}
 
 				keyList[i].timer.update();
 
 
-			}	
+			}
+
+			return action;
 		}
 			
 	}

@@ -6,11 +6,10 @@ namespace rpgtest2020
 {
 	class Timer : GameData
 	{
-		private readonly float coolDown;
+		public readonly float coolDown;
 		private float timer;
 		private bool canCount = true;
 		private bool doOnce = false;
-
 
 		public Timer(float coolDown) { this.coolDown = coolDown; start(); }
 
@@ -19,12 +18,10 @@ namespace rpgtest2020
 		/// </summary>
 		public void update()
 		{
-
 			if(timer > 0f && canCount)
 				timer -= GAME.DeltaTime / (float)GAME.GetFramerate();
 			else if(timer <= 0f && !doOnce)
-				stop();
-			
+				stop();	
 		}
 
 		/// <summary>

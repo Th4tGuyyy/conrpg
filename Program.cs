@@ -9,8 +9,6 @@ namespace rpgtest2020
 		const int WINDOW_WIDTH = 36;
 		const int WINDOW_HEIGHT = 31;
 
-		Player player;
-
 		Level currentLevel;
 		static void Main(string[] args)
 		{
@@ -29,15 +27,8 @@ namespace rpgtest2020
 			GameData.VConsole.gameHandle = this;
 			GameData.VConsole.writeLine("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLGMOPeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
 			
-
-
-			currentLevel = new Level("aidsworld.txt");
-
-			player = new Player(currentLevel,"Bobby", new Glyph("@", Palettes.DARK_BLUE), new Point(4, 4), 10);//later remove player create here, and set in level
-
-
-			currentLevel.player = player;
-
+			currentLevel = new Level("mazeworld.txt");
+			
 		}
 		public override void Render()
 		{

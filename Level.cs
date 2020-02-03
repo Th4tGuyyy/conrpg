@@ -45,6 +45,8 @@ namespace rpgtest2020
 						world[x, y].glyph = deHash(line[x], new Point(x,y));
 					}
 				}sr.Close();
+
+				world[player.getLocation().X, player.getLocation().Y].entity = player;
 			}
 			catch {
 				
@@ -72,17 +74,22 @@ namespace rpgtest2020
 				//entityList.add(loc, new Wall(this,loc));
 				//world[loc.X, loc.Y].entity = new Wall(this, loc);
 				world[loc.X, loc.Y].isSolid = true;
+				world[loc.X, loc.Y].isTransparent = false;
 
 
 			}
 			else if(metaData == 2) {
-				Goblin gbl = new Goblin(this, loc);
+				Entity gbl = new Entity(this, loc);
 				Random r = new Random();
 				gbl.setStats(new Glyph("G", Palettes.DARK_RED), 10, 0.25f, 10, 10, 10, 10);
 
 
 				world[loc.X, loc.Y].entity = gbl;
 				
+			}
+			else if (metaData == 224)
+			{
+				player = new Player(this, "Bobby", new Glyph("@", Palettes.DARK_BLUE), loc, 10);
 			}
 
 
@@ -92,7 +99,7 @@ namespace rpgtest2020
 
 		public void update()
 		{
-			player.update();
+			//player.update();
 
 			//update all entities and player?
 
@@ -116,10 +123,6 @@ namespace rpgtest2020
 					//world xy are based off player,
 				}
 			}
-
-
-
-
 		}
 
 
@@ -132,9 +135,22 @@ namespace rpgtest2020
 				for(int x = start.X; x < end.X; x++) {
 
 					if(x >=0 && y>=0 && x < WIDTH && y < HEIGHT)
-						world[x,y].render(x+xOffset- start.X, y+yOffset- start.Y);
+					{
+						/*if (player.canSee(x, y))
+							Glyph.setGlyph(new Point(x + xOffset - start.X, y + yOffset - start.Y), new Glyph("O", Palettes.RED, Palettes.BLACK));//world[x, y].render(x + xOffset - start.X, y + yOffset - start.Y);
+						else
+							world[x, y].render(x + xOffset - start.X, y + yOffset - start.Y);*/
+						world[x, y].renderHidden(x + xOffset - start.X, y + yOffset - start.Y);
+					}
 					//world xy are based off player,
 				}
+			}
+
+			foreach(Point p in player.viewHandler.viewedPoints)
+			{
+				int x = p.X + xOffset - start.X, y = p.Y + yOffset - start.Y;
+				if (y >= 0 && x >= 0 && x < screenSize.X && y < screenSize.Y)
+					world[p.X, p.Y].render(x, y);
 			}
 			//render world and entites
 		}

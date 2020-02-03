@@ -5,13 +5,38 @@ using System.Text;
 
 namespace rpgtest2020
 {
-	abstract class Actor : GameData
+	class Entity : GameData
 	{
 		//inventory
 		//stats
 		//name
 		//lvl = based off stats
 		//location
+
+		/*
+	 Job:
+		default stat mod
+		default inventory
+		special actions ex: shop, attacking, running
+		stack of interations to complete
+	 Race:
+		defulat stats
+		attack other races
+		only friendly interacts with same race
+
+	General:
+		order of day:
+			1. wake up
+			2. do job
+			3. go back to bed(spawn point) and sleep
+
+		Events what happen on day
+			- attack player or enemy if in range and "can" attack?
+			- run away if cant attack
+			- clear stack and go to bed
+
+
+		 */
 
 
 		protected String name;
@@ -29,11 +54,14 @@ namespace rpgtest2020
 		protected Timer updateTimer;
 		protected Random random;
 
+		public ViewRangeHandler viewHandler;
+		List<Point> viewedPoints = new List<Point>();
+
 		protected Level level;
 		protected Point location;
 
 
-		public Actor(Level owner, Point location)
+		public Entity(Level owner, Point location)
 		{
 			this.level = owner;
 			this.location = location;
@@ -51,6 +79,7 @@ namespace rpgtest2020
 			this.attack = new CharacterStat(attack);
 
 			updateTimer = new Timer(this.moveSpeed.Value);
+			viewHandler = new ViewRangeHandler(10);//range
 		}
 
 		public virtual void update()
@@ -58,9 +87,17 @@ namespace rpgtest2020
 			if(updateTimer.complete()) {
 				updateTimer.start();
 				randomMove();
+				updateViewRange();
 			}
 
 			updateTimer.update();
+
+		}
+
+		protected void updateViewRange()
+		{
+			viewHandler.scanArea(level.world, location);
+			viewedPoints = viewHandler.viewedPoints;
 
 		}
 
@@ -95,6 +132,12 @@ namespace rpgtest2020
 			return movedTile;
 		}
 
+		/// <summary>Changes only the point, not the map[,] dont normally call this function</summary>
+		public void hardSetLocation(Point newLoc)
+		{
+			location = newLoc;
+		}
+
 		/// <summary>sets location to newLoc,</summary>
 		private void setActor(Point newLoc)
 		{
@@ -111,6 +154,11 @@ namespace rpgtest2020
 		public Point getLocation()
 		{
 			return location;
+		}
+
+		public bool canSee(int x, int y)
+		{
+			return viewHandler.viewedPoints.Contains(new Point(x, y));
 		}
 
 
