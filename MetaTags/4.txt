@@ -1,4 +1,4 @@
 TELEPORT
-inside.txt
+outside.txt
 4
 2

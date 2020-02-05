@@ -1,11 +1,10 @@
 ﻿using ConsoleGameEngine;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace rpgtest2020
 {
-	class Entity : Interactable
+	internal class Entity : Interactable
 	{
 		//inventory
 		//stats
@@ -35,9 +34,7 @@ namespace rpgtest2020
 			- run away if cant attack
 			- clear stack and go to bed
 
-
 		 */
-
 
 		protected String name;
 		protected int health;
@@ -49,14 +46,11 @@ namespace rpgtest2020
 		protected CharacterStat strength;
 		protected CharacterStat attack;
 
-
 		protected Timer updateTimer;
 		protected Random random;
 
 		public ViewRangeHandler viewHandler;
-		List<Point> viewedPoints = new List<Point>();
-
-
+		private List<Point> viewedPoints = new List<Point>();
 
 		public Entity(Level owner, Point location)
 		{
@@ -64,7 +58,7 @@ namespace rpgtest2020
 			this.location = location;
 		}
 
-		public virtual void setStats(Glyph sprite,float maxHealth, float moveSpeed, float agility, float defence, float strength, float attack)
+		public virtual void setStats(Glyph sprite, float maxHealth, float moveSpeed, float agility, float defence, float strength, float attack)
 		{
 			this.sprite = sprite;
 
@@ -76,7 +70,7 @@ namespace rpgtest2020
 			this.attack = new CharacterStat(attack);
 
 			updateTimer = new Timer(this.moveSpeed.Value);
-			viewHandler = new ViewRangeHandler(9);//range
+			viewHandler = new ViewRangeHandler(10);//range
 		}
 
 		public override void update()
@@ -88,14 +82,12 @@ namespace rpgtest2020
 			}
 
 			updateTimer.update();
-
 		}
 
 		protected void updateViewRange()
 		{
 			viewHandler.scanArea(level.world, location);
 			viewedPoints = viewHandler.viewedPoints;
-
 		}
 
 		private void randomMove()
@@ -113,11 +105,10 @@ namespace rpgtest2020
 		{
 			bool movedTile = false;
 
-			if(level.world[newLoc.X, newLoc.Y].topObject != null){
+			if(level.world[newLoc.X, newLoc.Y].topObject != null) {
 				//no move do logic
 				//VConsole.writeLine("Hit not a wall!");
-				if(level.world[newLoc.X, newLoc.Y].topObject is Teleporter)
-				{
+				if(level.world[newLoc.X, newLoc.Y].topObject is Teleporter) {
 					say("getting ready to Teleporting from entity");
 					Teleporter t = (Teleporter)level.world[newLoc.X, newLoc.Y].topObject;
 					t.teleport(this);
@@ -164,10 +155,5 @@ namespace rpgtest2020
 		{
 			return viewHandler.viewedPoints.Contains(new Point(x, y));
 		}
-
-
-
-		
-
 	}
 }

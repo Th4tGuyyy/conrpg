@@ -1,21 +1,25 @@
-﻿using System;
-using ConsoleGameEngine;
+﻿using ConsoleGameEngine;
+using System;
+using System.IO;
 
 namespace rpgtest2020
 {
-	class Program : ConsoleGame
+	internal class Program : ConsoleGame
 	{
-		const int PIXEL_SIZE = 16;
-		const int WINDOW_WIDTH = 36;
-		const int WINDOW_HEIGHT = 33;
+		private const int PIXEL_SIZE = 16;
+		private const int WINDOW_WIDTH = 36;
+		private const int WINDOW_HEIGHT = 33;
 
-		static void Main(string[] args)
+		private static void Main(string[] args)
 		{
 			new Program().Construct(WINDOW_WIDTH, WINDOW_HEIGHT, PIXEL_SIZE, PIXEL_SIZE, FramerateMode.MaxFps);
 		}
 
 		public override void Create()
 		{
+			if(File.Exists(GameData.METALOCATION + "Error.txt"))
+				File.Delete(GameData.METALOCATION + "Error.txt");
+
 			Engine.SetPalette(Palettes.Default);
 			//Engine.Borderless();
 			Console.Title = "Test";
@@ -25,15 +29,23 @@ namespace rpgtest2020
 			GameData.GAME = this;
 			GameData.VConsole.gameHandle = this;
 			GameData.VConsole.writeLine("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLGMOPeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
-			
-			GameData.currentLevel = new Level("rockworld.txt");
-			
+
+			//String k = "outside.text"
+			GameData.allLevels.Add("outside.txt",new Level("outside.txt"));
+			GameData.allLevels.Add("inside.txt", new Level("inside.txt"));
+
+			GameData.allLevels["outside.txt"].loadLevel();
+			GameData.allLevels["inside.txt"].loadLevel();
+
+			GameData.player.level = GameData.allLevels["outside.txt"];
 		}
+
 		public override void Render()
 		{
 			Engine.ClearBuffer();
 
-			GameData.currentLevel.render();
+			//GameData.currentLevel.render();
+			GameData.player.level.render();
 
 			//player.render();
 			GameData.VConsole.render();
@@ -46,16 +58,14 @@ namespace rpgtest2020
 			Engine.DisplayBuffer();
 		}
 
-
 		public override void Update()
 		{
-			Console.Title = "FPS: " +Math.Floor(GetFramerate());
+			Console.Title = "FPS: " + Math.Floor(GetFramerate());
 
 			//handleKeyDown();
 			//player.update();
-			GameData.currentLevel.update();
+			//GameData.currentLevel.update();
+			GameData.player.level.update();
 		}
-
-	
 	}
 }

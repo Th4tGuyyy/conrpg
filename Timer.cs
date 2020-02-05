@@ -1,27 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace rpgtest2020
+﻿namespace rpgtest2020
 {
-	class Timer : GameData
+	internal class Timer : GameData
 	{
 		public readonly float coolDown;
 		private float timer;
 		private bool canCount = true;
 		private bool doOnce = false;
 
-		public Timer(float coolDown) { this.coolDown = coolDown; start(); }
+		public Timer(float coolDown)
+		{
+			this.coolDown = coolDown; start();
+		}
 
 		/// <summary>
-		/// Expected to get called every frame, increacements timer 
+		/// Expected to get called every frame, increacements timer
 		/// </summary>
 		public void update()
 		{
 			if(timer > 0f && canCount)
 				timer -= GAME.DeltaTime / (float)GAME.GetFramerate();
 			else if(timer <= 0f && !doOnce)
-				stop();	
+				stop();
 		}
 
 		/// <summary>
@@ -30,7 +29,7 @@ namespace rpgtest2020
 		/// <returns>timer <=0 </returns>
 		public bool complete()
 		{
-			return timer <= 0; 
+			return timer <= 0;
 		}
 
 		/// <summary>starts timer, or restarts it</summary>

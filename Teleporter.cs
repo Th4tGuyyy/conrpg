@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using ConsoleGameEngine;
+﻿using ConsoleGameEngine;
 
 namespace rpgtest2020
 {
-	class Teleporter : Interactable
+	internal class Teleporter : Interactable
 	{
 		/*File formatting
 		TELEPORT
@@ -16,30 +13,32 @@ namespace rpgtest2020
 		private Level targetLevel;
 		private Point targetPoint;
 
-		public Teleporter(Level owner,Point location, String levelName, Point targetLocation)
+		public Teleporter(Level owner, Point location, Level targetLevel, Point targetLocation)
 		{
+			sprite = new Glyph("T", Palettes.GREEN);
 			level = owner;
 			this.location = location;
 
-			targetLevel = new Level(levelName);
+			this.targetLevel = targetLevel;
 			this.targetPoint = targetLocation;
 		}
 
 		public void teleport(Entity entity)
 		{
-			VConsole.writeLine("Telporting");
+			entity.say("Teleporting");
 
-			if(entity is Player)
-			{
+			if(entity is Player) {
+				level.world[player.getLocation().X, player.getLocation().Y].topObject = null;
 				targetLevel.world[targetPoint.X, targetPoint.Y].topObject = entity;
-				currentLevel = targetLevel;
+				player.hardSetLocation(targetPoint);
+				player.level = targetLevel;
 			}
 			//spawn on top, only interacts when you TRY to walk on it
 		}
 
 		public override void update()
 		{
-			if (sprite != level.world[location.X, location.Y].glyph)
+			if(sprite != level.world[location.X, location.Y].glyph)
 				sprite = level.world[location.X, location.Y].glyph;
 		}
 	}

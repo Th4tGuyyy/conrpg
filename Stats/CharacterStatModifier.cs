@@ -1,35 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace rpgtest2020
+﻿namespace rpgtest2020
 {
-    public enum Stats
-    {
-        MaxHealth,
-        Armor,
-        Strength,
-        Dexterity
-    }
-    internal class CharacterStatModifier
-    {
-        private Stats stat_;
-        private StatModifier modifier_;
+	public enum Stats
+	{
+		MaxHealth,
+		Armor,
+		Strength,
+		Dexterity
+	}
 
-        public Stats Stat {
-            get { return stat_; }
-            set { stat_ = value; }
-        }
+	internal class CharacterStatModifier
+	{
+		private Stats stat_;
+		private StatModifier modifier_;
 
-        public StatModifier Modifier {
-            get { return modifier_; }
-            set { modifier_ = value; }
-        }
+		public Stats Stat {
+			get { return stat_; }
+			set { stat_ = value; }
+		}
 
-        public CharacterStatModifier(Stats stat, StatModifier modifier)
-        {
-            stat_ = stat;
-            modifier_ = modifier;
-        }
-    }
+		public StatModifier Modifier {
+			get { return modifier_; }
+			set { modifier_ = value; }
+		}
+
+		public CharacterStatModifier(Stats stat, StatModifier modifier)
+		{
+			stat_ = stat;
+			modifier_ = modifier;
+		}
+	}
 }

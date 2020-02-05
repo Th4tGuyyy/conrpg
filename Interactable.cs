@@ -1,17 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using ConsoleGameEngine;
+﻿using ConsoleGameEngine;
 
 namespace rpgtest2020
 {
-	class Interactable : GameData
+	internal class Interactable : GameData
 	{
 		public Glyph sprite;
 
-		protected Level level;
+		public Level level;
 		protected Point location;
 
-		public virtual void update() { }
+		public virtual void update()
+		{
+		}
 	}
 }

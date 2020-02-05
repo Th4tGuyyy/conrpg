@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using ConsoleGameEngine;
+﻿using ConsoleGameEngine;
+using System;
 
 namespace rpgtest2020
 {
-	class Glyph : GameData
+	internal class Glyph : GameData
 	{
 		public int fgColor = 1;
 		public int bgColor = -1;
@@ -36,8 +34,6 @@ namespace rpgtest2020
 				GAME.Engine.WriteText(loc, thing.character, thing.fgColor, thing.bgColor);
 			else
 				GAME.Engine.WriteText(loc, thing.character, thing.fgColor, GAME.Engine.GetBackground());
-
 		}
-
 	}
 }

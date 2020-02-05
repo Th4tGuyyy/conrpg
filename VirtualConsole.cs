@@ -1,13 +1,12 @@
-﻿using System;
+﻿using ConsoleGameEngine;
+using System;
 using System.Collections.Generic;
-using System.Text;
-using ConsoleGameEngine;
 
 namespace rpgtest2020
 {
-	class VirtualConsole
+	internal class VirtualConsole
 	{
-		public readonly Point topLeft; 
+		public readonly Point topLeft;
 		public readonly Point bottomRight;
 
 		private Queue<String> textBuffer;
@@ -16,13 +15,13 @@ namespace rpgtest2020
 
 		public ConsoleGame gameHandle;
 
-		public VirtualConsole(int x,int y, int width, int height)
+		public VirtualConsole(int x, int y, int width, int height)
 		{
 			topLeft = new Point(x, y);
 			bottomRight = new Point(x + width, y + height);
 
 			maxHeight = height - 1;
-			maxWidth = width-1;
+			maxWidth = width - 1;
 
 			textBuffer = new Queue<string>();
 		}
@@ -31,12 +30,10 @@ namespace rpgtest2020
 		{
 			gameHandle.Engine.Frame(topLeft, bottomRight, Palettes.DARK_GRAY);
 
-
 			String[] arr = textBuffer.ToArray();
 			for(int i = 0; i < arr.Length; i++)
 				gameHandle.Engine.WriteText(new Point(topLeft.X + 1, topLeft.Y + 1 + i), arr[i], Palettes.GRAY);
 		}
- 
 
 		public void writeLine(String text)
 		{
@@ -51,7 +48,6 @@ namespace rpgtest2020
 				if(textBuffer.Count > maxHeight)
 					textBuffer.Dequeue();
 			}
-
 		}
 	}
 }

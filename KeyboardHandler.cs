@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using ConsoleGameEngine;
 
 namespace rpgtest2020
 {
-	class KeyboardHandler : GameData
+	internal class KeyboardHandler : GameData
 	{
 		private class Node
 		{
@@ -27,6 +25,7 @@ namespace rpgtest2020
 		{
 			keyList.Add(new Node(key, action, timer));
 		}
+
 		public void add(ConsoleKey key, Action action, float cooldown)
 		{
 			add(key, action, new Timer(cooldown));
@@ -36,9 +35,7 @@ namespace rpgtest2020
 		{
 			bool action = false;
 
-			for(int i =0; i < keyList.Count; i++) {
-
-
+			for(int i = 0; i < keyList.Count; i++) {
 				if(GAME.Engine.GetKey(keyList[i].key) && keyList[i].timer.complete()) {
 					keyList[i].timer.start();
 					keyList[i].action();
@@ -46,12 +43,9 @@ namespace rpgtest2020
 				}
 
 				keyList[i].timer.update();
-
-
 			}
 
 			return action;
 		}
-			
 	}
 }

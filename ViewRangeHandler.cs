@@ -1,34 +1,37 @@
-﻿using System;
+﻿using ConsoleGameEngine;
+using System;
 using System.Collections.Generic;
-using System.Text;
-using ConsoleGameEngine;
 
 namespace rpgtest2020
 {
-	class ViewRangeHandler
+	internal class ViewRangeHandler
 	{
-		class RangeList
+		private class RangeList
 		{
-			class Node
+			private class RangeNode
 			{
 				public double min, max;
-				public Node next;
+				public RangeNode next;
 
-				public Node(double min, double max) { this.min = min; this.max = max; }
-				public override bool Equals(object obj)
+				public RangeNode(double min, double max)
 				{
-					Node r = (Node)obj;
-					return min == r.min && max == r.max;
+					this.min = min; this.max = max;
 				}
+
+				/*public bool Equals(object obj)
+				{
+					RangeNode r = (RangeNode)obj;
+					return min == r.min && max == r.max;
+				}*/
 			}
 
-			Node top;
+			private RangeNode top;
 
 			public RangeList() => top = null;
 
 			public void add(double min, double max)
 			{
-				Node newNode = new Node(min, max);
+				RangeNode newNode = new RangeNode(min, max);
 				newNode.next = top;
 				top = newNode;
 			}
@@ -36,10 +39,9 @@ namespace rpgtest2020
 			public bool contains(double value)
 			{
 				bool found = false;
-				Node current = top;
-				while (current != null && !found)
-				{
-					if (current.min <= value && value <= current.max)
+				RangeNode current = top;
+				while(current != null && !found) {
+					if(current.min <= value && value <= current.max)
 						found = true;
 					current = current.next;
 				}
@@ -48,16 +50,15 @@ namespace rpgtest2020
 			}
 
 			public void clear() => top = null;
-
 		}
 
 		private RangeList bannedRadients = new RangeList();
 		public List<Point> viewedPoints;
 
-		int viewRange = 5;
-		static double margin = 0.05;
-		static double radStep = 0.05;//
-		static double radStart = 0.00000001;
+		private int viewRange = 5;
+		private static double margin = 0.05;
+		private static double radStep = 0.05;//
+		private static double radStart = 0.00000001;
 
 		public ViewRangeHandler(int range)
 		{
@@ -71,54 +72,47 @@ namespace rpgtest2020
 			***     *   *		but a circle
 					* @ *
 					*   *
-					*****		
+					*****
 			 */
+
 		public void scanArea(Tile[,] map, Point start)
 		{
 			viewedPoints.Clear();
 			bannedRadients.clear();
 
-			for (int i = 0; i < 2 + viewRange; i++)
-				scanRing(map,start, i);
+			for(int i = 0; i < 2 + viewRange; i++)
+				scanRing(map, start, i);
 		}
 
-		private void scanRing(Tile[,]map, Point start, double radius)
+		private void scanRing(Tile[,] map, Point start, double radius)
 		{
-			for (double i = radStart; i < 2 * Math.PI; i += radStep)
-			{
+			for(double i = radStart; i < 2 * Math.PI; i += radStep) {
 				Point e = viewPoint(map, start, radius, i);
-				if (e != new Point(-1, -1))
+				if(e != new Point(-1, -1))
 					viewedPoints.Add(e);
 			}
-				
 		}
 
 		private Point viewPoint(Tile[,] map, Point start, double radius, double radient)
 		{
-			Point viewedPoint = new Point(-1,-1);
+			Point viewedPoint = new Point(-1, -1);
 			int x = (int)(radius * Math.Cos(radient)) + start.X;
 			int y = (int)(radius * Math.Sin(radient)) + start.Y;
 
-			if (x < map.GetLength(0) && y < map.GetLength(1) && y >= 0 && x >= 0)
-			{
+			if(x < map.GetLength(0) && y < map.GetLength(1) && y >= 0 && x >= 0) {
 				/*if (map[x, y].isSolid)
 				{
 					viewedPoint = new Point(x, y);
 					bannedRadients.add(radient - margin, radient + margin);
 				}*/
-				if (!map[x, y].isTransparent && !bannedRadients.contains(radient))
-				{
+				if(!map[x, y].isTransparent && !bannedRadients.contains(radient)) {
 					bannedRadients.add(radient - margin, radient + margin);
 					viewedPoint = new Point(x, y);
 				}
-				else if (!bannedRadients.contains(radient)/* && x != start.X && y != start.Y*/)
-				{
+				else if(!bannedRadients.contains(radient)/* && x != start.X && y != start.Y*/) {
 					viewedPoint = new Point(x, y);
 				}//valid tile
 			}
-
-
-
 
 			return viewedPoint;
 		}
