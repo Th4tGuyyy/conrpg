@@ -8,21 +8,21 @@ namespace rpgtest2020
 	class Tile : GameData
 	{
 		//holds gylf for tile
-		//and entity for object ontop?
+		//and topObject for object ontop?
 		//use this to remove"Entity" list, to keep the xy the same as the map[,]
 		public Glyph glyph;
 		public bool isSolid = false;
 		public bool isTransparent = true;
-		public Entity entity;
+		public Interactable topObject;
 
-		/// <summary>Render glyph and entity above</summary>
+		/// <summary>Render glyph and topObject above</summary>
 		public void render(int x, int y)
 		{
-			if(entity != null) {
-				int bgcolor = entity.sprite.bgColor;
+			if(topObject != null) {
+				int bgcolor = topObject.sprite.bgColor;
 				if(bgcolor < 0)
 					bgcolor = glyph.bgColor;
-				GAME.Engine.WriteText(new Point(x, y), entity.sprite.character, entity.sprite.fgColor, bgcolor);
+				GAME.Engine.WriteText(new Point(x, y), topObject.sprite.character, topObject.sprite.fgColor, bgcolor);
 			}
 			else {
 				Glyph.setGlyph(new Point(x, y), glyph);

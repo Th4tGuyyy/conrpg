@@ -7,7 +7,7 @@ using ExtendedAscii;
 
 namespace rpgtest2020
 {
-	class Level //: Entity
+	class Level : GameData
 	{
 		static int xOffset = 0;
 		static int yOffset = 0;
@@ -23,7 +23,8 @@ namespace rpgtest2020
 
 		public Level(String path)
 		{
-			loadLevel(path);
+			loadLevel(GameData.MAPSLOCATION + path);
+
 		}
 
 		private void loadLevel(String path)
@@ -46,7 +47,7 @@ namespace rpgtest2020
 					}
 				}sr.Close();
 
-				world[player.getLocation().X, player.getLocation().Y].entity = player;
+				world[player.getLocation().X, player.getLocation().Y].topObject = player;
 			}
 			catch {
 				
@@ -72,24 +73,86 @@ namespace rpgtest2020
 			int metaData = Convert.ToInt32(hex[2]+"", 16);
 			if(metaData == 1) {
 				//entityList.add(loc, new Wall(this,loc));
-				//world[loc.X, loc.Y].entity = new Wall(this, loc);
+				//world[loc.X, loc.Y].topObject = new Wall(this, loc);
 				world[loc.X, loc.Y].isSolid = true;
 				world[loc.X, loc.Y].isTransparent = false;
 
 
 			}
-			else if(metaData == 2) {
+			else if(metaData == 2)
+			{
 				Entity gbl = new Entity(this, loc);
 				Random r = new Random();
 				gbl.setStats(new Glyph("G", Palettes.DARK_RED), 10, 0.25f, 10, 10, 10, 10);
 
 
-				world[loc.X, loc.Y].entity = gbl;
-				
+				world[loc.X, loc.Y].topObject = gbl;
 			}
-			else if (metaData == 224)
+			else if(metaData == 3)
+			{
+
+				Teleporter tp = new Teleporter(this, loc,"smallworld.txt", new Point(2, 2));
+				tp.sprite = new Glyph("T",Palettes.DARK_MAGENTA);
+				world[loc.X, loc.Y].topObject = tp;
+				/*StreamReader sr = new StreamReader(@"MetaTags/" + metaData);
+				String catagory = sr.ReadLine().ToLower();
+
+				if (catagory == "teleport")
+				{
+					String levelName = sr.ReadLine() + ".txt";
+					int tpX = Convert.ToInt32(sr.ReadLine());
+					int tpY = Convert.ToInt32(sr.ReadLine());
+
+					Teleporter tp = new Teleporter(this, loc, levelName, new Point(tpX, tpY));
+
+					world[loc.X, loc.Y].topObject = tp;
+				}*/
+			}
+			else if(metaData == 224)
 			{
 				player = new Player(this, "Bobby", new Glyph("@", Palettes.DARK_BLUE), loc, 10);
+				world[loc.X, loc.Y].topObject = player;
+			}
+			else
+			{
+				/*try
+				{
+					StreamReader sr = new StreamReader(@"MetaTags/" + metaData);
+					String catagory = sr.ReadLine().ToLower();
+
+					if(catagory == "teleport")
+					{
+						String levelName = sr.ReadLine();
+						int tpX = Convert.ToInt32(sr.ReadLine());
+						int tpY = Convert.ToInt32(sr.ReadLine());
+
+						Teleporter tp = new Teleporter(this,loc,levelName,new Point(tpX,tpY));
+
+						world[loc.X, loc.Y].topObject = tp;
+					}
+					else if (catagory == "player")//224
+					{
+						player = new Player(this, "Bobby", new Glyph("@", Palettes.DARK_BLUE), loc, 10);
+						world[loc.X, loc.Y].topObject = player;
+					}
+					else if(catagory == "goblin")
+					{
+						Entity gbl = new Entity(this, loc);
+						Random r = new Random();
+						gbl.setStats(new Glyph("G", Palettes.DARK_RED), 10, 0.25f, 10, 10, 10, 10);
+
+
+						world[loc.X, loc.Y].topObject = gbl;
+					}
+					else
+					{
+
+					}
+				}
+				catch 
+				{
+
+				}*/
 			}
 
 
@@ -109,8 +172,8 @@ namespace rpgtest2020
 			for(int y = start.Y; y < end.Y; y++) {
 				for(int x = start.X; x < end.X; x++) {
 
-					if(x >= 0 && y >= 0 && x < WIDTH && y < HEIGHT && world[x, y].entity != null)
-						world[x, y].entity.update();
+					if(x >= 0 && y >= 0 && x < WIDTH && y < HEIGHT && world[x, y].topObject != null)
+						world[x, y].topObject.update();
 					//world xy are based off player,
 				}
 			}*/
@@ -118,8 +181,8 @@ namespace rpgtest2020
 			for(int y = 0; y < HEIGHT; y++) {
 				for(int x = 0; x < WIDTH; x++) {
 
-					if(x >= 0 && y >= 0 && x < WIDTH && y < HEIGHT && world[x, y].entity != null)
-						world[x, y].entity.update();
+					if(x >= 0 && y >= 0 && x < WIDTH && y < HEIGHT && world[x, y].topObject != null)
+						world[x, y].topObject.update();
 					//world xy are based off player,
 				}
 			}

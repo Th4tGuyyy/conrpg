@@ -1,0 +1,4 @@
+TELEPORT
+smallworld
+2
+2

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace rpgtest2020
 {
-	class Entity : GameData
+	class Entity : Interactable
 	{
 		//inventory
 		//stats
@@ -41,7 +41,6 @@ namespace rpgtest2020
 
 		protected String name;
 		protected int health;
-		public Glyph sprite;
 
 		protected CharacterStat maxHealth;
 		protected CharacterStat moveSpeed;
@@ -57,8 +56,6 @@ namespace rpgtest2020
 		public ViewRangeHandler viewHandler;
 		List<Point> viewedPoints = new List<Point>();
 
-		protected Level level;
-		protected Point location;
 
 
 		public Entity(Level owner, Point location)
@@ -79,10 +76,10 @@ namespace rpgtest2020
 			this.attack = new CharacterStat(attack);
 
 			updateTimer = new Timer(this.moveSpeed.Value);
-			viewHandler = new ViewRangeHandler(10);//range
+			viewHandler = new ViewRangeHandler(9);//range
 		}
 
-		public virtual void update()
+		public override void update()
 		{
 			if(updateTimer.complete()) {
 				updateTimer.start();
@@ -116,15 +113,22 @@ namespace rpgtest2020
 		{
 			bool movedTile = false;
 
-			if(level.world[newLoc.X, newLoc.Y].entity != null){
+			if(level.world[newLoc.X, newLoc.Y].topObject != null){
 				//no move do logic
-				VConsole.writeLine("Hit not a wall!");
+				//VConsole.writeLine("Hit not a wall!");
+				if(level.world[newLoc.X, newLoc.Y].topObject is Teleporter)
+				{
+					say("getting ready to Teleporting from entity");
+					Teleporter t = (Teleporter)level.world[newLoc.X, newLoc.Y].topObject;
+					t.teleport(this);
+				}
 			}
 			else if(level.world[newLoc.X, newLoc.Y].isSolid) {
-				VConsole.writeLine("Hit a wall!");
+				//VConsole.writeLine("Hit a wall!");
 			}
 			else {
 				//nothing infront, so move
+				//say("Moved");
 				setActor(newLoc);
 				movedTile = true;
 			}
@@ -141,8 +145,8 @@ namespace rpgtest2020
 		/// <summary>sets location to newLoc,</summary>
 		private void setActor(Point newLoc)
 		{
-			level.world[location.X, location.Y].entity = null;
-			level.world[newLoc.X, newLoc.Y].entity = this;
+			level.world[location.X, location.Y].topObject = null;
+			level.world[newLoc.X, newLoc.Y].topObject = this;
 			location = newLoc;
 		}
 

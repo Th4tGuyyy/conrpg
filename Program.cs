@@ -7,9 +7,8 @@ namespace rpgtest2020
 	{
 		const int PIXEL_SIZE = 16;
 		const int WINDOW_WIDTH = 36;
-		const int WINDOW_HEIGHT = 31;
+		const int WINDOW_HEIGHT = 33;
 
-		Level currentLevel;
 		static void Main(string[] args)
 		{
 			new Program().Construct(WINDOW_WIDTH, WINDOW_HEIGHT, PIXEL_SIZE, PIXEL_SIZE, FramerateMode.MaxFps);
@@ -21,26 +20,28 @@ namespace rpgtest2020
 			//Engine.Borderless();
 			Console.Title = "Test";
 			TargetFramerate = 100;
-			Engine.SetBackground(0);
+			//Engine.SetBackground(Palettes.DARK_CYAN);
 
 			GameData.GAME = this;
 			GameData.VConsole.gameHandle = this;
 			GameData.VConsole.writeLine("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLGMOPeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
 			
-			currentLevel = new Level("mazeworld.txt");
+			GameData.currentLevel = new Level("rockworld.txt");
 			
 		}
 		public override void Render()
 		{
 			Engine.ClearBuffer();
 
-			currentLevel.render();
+			GameData.currentLevel.render();
 
 			//player.render();
 			GameData.VConsole.render();
 			Engine.Frame(new Point(20, 0), new Point(35, 20), Palettes.DARK_GRAY);
 
 			Engine.Frame(new Point(0, 0), new Point(20, 20), Palettes.DARK_GRAY);
+
+			Engine.Frame(new Point(0, 30), new Point(35, 32), Palettes.DARK_GRAY);
 
 			Engine.DisplayBuffer();
 		}
@@ -52,7 +53,7 @@ namespace rpgtest2020
 
 			//handleKeyDown();
 			//player.update();
-			currentLevel.update();
+			GameData.currentLevel.update();
 		}
 
 	

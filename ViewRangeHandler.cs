@@ -101,12 +101,12 @@ namespace rpgtest2020
 
 			if (x < map.GetLength(0) && y < map.GetLength(1) && y >= 0 && x >= 0)
 			{
-				if (map[x, y].isSolid)
+				/*if (map[x, y].isSolid)
 				{
 					viewedPoint = new Point(x, y);
 					bannedRadients.add(radient - margin, radient + margin);
-				}
-				else if (!map[x, y].isTransparent && !bannedRadients.contains(radient))
+				}*/
+				if (!map[x, y].isTransparent && !bannedRadients.contains(radient))
 				{
 					bannedRadients.add(radient - margin, radient + margin);
 					viewedPoint = new Point(x, y);
