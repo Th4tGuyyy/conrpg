@@ -57,7 +57,7 @@ namespace rpgtest2020
 
 		private int viewRange = 5;
 		private static double margin = 0.05;
-		private static double radStep = 0.05;//
+		private static double radStep = 0.05;//0.05
 		private static double radStart = 0.00000001;
 
 		public ViewRangeHandler(int range)

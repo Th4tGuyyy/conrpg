@@ -49,8 +49,8 @@ namespace rpgtest2020
 		protected Timer updateTimer;
 		protected Random random;
 
-		public ViewRangeHandler viewHandler;
-		private List<Point> viewedPoints = new List<Point>();
+		private ViewRangeHandler viewHandler;
+		private List<Point> lastViewedPoints = new List<Point>();
 
 		public Entity(Level owner, Point location)
 		{
@@ -70,7 +70,7 @@ namespace rpgtest2020
 			this.attack = new CharacterStat(attack);
 
 			updateTimer = new Timer(this.moveSpeed.Value);
-			viewHandler = new ViewRangeHandler(10);//range
+			viewHandler = new ViewRangeHandler(5);//range
 		}
 
 		public override void update()
@@ -84,10 +84,15 @@ namespace rpgtest2020
 			updateTimer.update();
 		}
 
+		public List<Point> getLastViewPoints()
+		{
+			return lastViewedPoints;
+		} 
+
 		protected void updateViewRange()
 		{
 			viewHandler.scanArea(level.world, location);
-			viewedPoints = viewHandler.viewedPoints;
+			lastViewedPoints = viewHandler.viewedPoints;
 		}
 
 		private void randomMove()

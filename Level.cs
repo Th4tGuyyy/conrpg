@@ -132,7 +132,7 @@ namespace rpgtest2020
 						world[x, y].renderHidden(x + xOffset - start.X, y + yOffset - start.Y);	
 			 
 			//change later where point is key so lookup would be 01 and handle in main render loop 
-			foreach(Point p in player.viewHandler.viewedPoints) {
+			foreach(Point p in player.getLastViewPoints()/*player.viewHandler.viewedPoints*/) {
 				int x = p.X + xOffset - start.X, y = p.Y + yOffset - start.Y;
 				if(y >= 0 && x >= 0 && x < screenSize.X && y < screenSize.Y)
 					world[p.X, p.Y].render(x, y);

@@ -7,7 +7,7 @@ namespace rpgtest2020
 {
 	internal class Program : ConsoleGame
 	{
-		private const int PIXEL_SIZE = 16;
+		private const int PIXEL_SIZE = 20;
 		private const int WINDOW_WIDTH = 36;
 		private const int WINDOW_HEIGHT = 33;
 
@@ -24,7 +24,7 @@ namespace rpgtest2020
 			Engine.SetPalette(Palettes.Default);
 			//Engine.Borderless();
 
-			TargetFramerate = 100;
+			TargetFramerate = 30;
 
 
 			GameData.GAME = this;
@@ -56,8 +56,8 @@ namespace rpgtest2020
 		{
 			Engine.ClearBuffer();
 
-			//GameData.currentLevel.render();
-			GameData.player.level.render();
+			if(GameData.currentGameState == GameData.GameState.RUNNING)
+				GameData.player.level.render();
 
 			//player.render();
 			GameData.VConsole.render();
@@ -77,7 +77,8 @@ namespace rpgtest2020
 			//handleKeyDown();
 			//player.update();
 			//GameData.currentLevel.update();
-			GameData.player.level.update();
+			if(GameData.currentGameState == GameData.GameState.RUNNING)
+				GameData.player.level.update();
 		}
 	}
 }

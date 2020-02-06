@@ -29,10 +29,8 @@ namespace rpgtest2020
 
 			if(entity is Player) {
 				level.world[player.getLocation().X, player.getLocation().Y].topObject = null;//deletes player
-				targetLevel.world[targetPoint.X, targetPoint.Y].topObject = entity;//moves player
-				player.hardSetLocation(targetPoint);//corrects player location
-
-				player.level = targetLevel;//changes level
+				player.level = targetLevel;
+				player.move(targetPoint);//moves player to targetlocation
 			}
 		}
 

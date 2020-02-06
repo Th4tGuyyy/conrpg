@@ -11,6 +11,8 @@ namespace rpgtest2020
 			public Action action;
 			public Timer timer;
 
+			//public Node next;
+
 			public Node(ConsoleKey key, Action action, Timer timer)
 			{
 				this.key = key;

@@ -23,12 +23,9 @@ namespace rpgtest2020
 			character = str;
 		}
 
-		public String toString()
-		{
-			return $"{character} {fgColor} {bgColor}";
-		}
+		public String toString() => $"{character} {fgColor} {bgColor}";
 
-		public static void setGlyph(Point loc, Glyph thing)
+		public static void setGlyph(Point loc, Glyph thing)//renders glyph, used for debug
 		{
 			if(thing.bgColor != -1)
 				GAME.Engine.WriteText(loc, thing.character, thing.fgColor, thing.bgColor);
