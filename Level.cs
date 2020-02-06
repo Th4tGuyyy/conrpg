@@ -18,14 +18,14 @@ namespace rpgtest2020
 
 		public Tile[,] world;
 
-		public String path;
+		private String path;
 
 		public Level(String path)
 		{
 			this.path = GameData.MAPSLOCATION + path;
 		}
-
-		public void loadLevel()
+		
+		public void loadLevel()//time reminant might be caused if mutliple player spawns?
 		{
 			try {
 				StreamReader sr = new StreamReader(path);
@@ -45,8 +45,6 @@ namespace rpgtest2020
 					}
 				}
 				sr.Close();
-
-				world[player.getLocation().X, player.getLocation().Y].topObject = player;
 			}
 			catch {
 			}
@@ -117,56 +115,23 @@ namespace rpgtest2020
 
 		public void update()
 		{
-			//player.update();
-
-			//update all entities and player?
-
-			/*Point start = new Point(player.getLocation().X - viewSize / 2, player.getLocation().Y - viewSize / 2);
-			Point end = new Point(player.getLocation().X + viewSize / 2, player.getLocation().Y + viewSize / 2);
-
-			for(int y = start.Y; y < end.Y; y++) {
-				for(int x = start.X; x < end.X; x++) {
-					if(x >= 0 && y >= 0 && x < WIDTH && y < HEIGHT && world[x, y].topObject != null)
+			for(int y = 0; y < HEIGHT; y++) 
+				for(int x = 0; x < WIDTH; x++) 
+					if(x >= 0 && y >= 0 && x < WIDTH && y < HEIGHT && world[x, y].topObject != null) 
 						world[x, y].topObject.update();
-					//world xy are based off player,
-				}
-			}*/
-
-			for(int y = 0; y < HEIGHT; y++) {
-				for(int x = 0; x < WIDTH; x++) {
-					if(x >= 0 && y >= 0 && x < WIDTH && y < HEIGHT && world[x, y].topObject != null) {
-
-						if(world[x, y].topObject is Player && x != player.getLocation().X && y != player.getLocation().Y)//handles time reminant
-							world[x, y].topObject = null;
-						else
-							world[x, y].topObject.update();
-					}
-					//world xy are based off player,
-				}
-			}
 		}
 
 		public void render()
 		{
 			Point start = new Point(player.getLocation().X - viewSize / 2, player.getLocation().Y - viewSize / 2);
 			Point end = new Point(player.getLocation().X + viewSize / 2, player.getLocation().Y + viewSize / 2);
-
-			for(int y = start.Y; y < end.Y; y++) {
-				for(int x = start.X; x < end.X; x++) {
-					if(x >= 0 && y >= 0 && x < WIDTH && y < HEIGHT) {
-						/*if (player.canSee(x, y))
-							Glyph.setGlyph(new Point(x + xOffset - start.X, y + yOffset - start.Y), new Glyph("O", Palettes.RED, Palettes.BLACK));//world[x, y].render(x + xOffset - start.X, y + yOffset - start.Y);
-						else
-							world[x, y].render(x + xOffset - start.X, y + yOffset - start.Y);*/
-						world[x, y].renderHidden(x + xOffset - start.X, y + yOffset - start.Y);
-					}
-					//world xy are based off player,
-				}
-			}
-
-			/*
-			 * change later where point is key so lookup would be 01 and handle in main render loop
-			 */
+			//world xy are based off player,
+			for(int y = start.Y; y < end.Y; y++)
+				for(int x = start.X; x < end.X; x++)
+					if(x >= 0 && y >= 0 && x < WIDTH && y < HEIGHT)
+						world[x, y].renderHidden(x + xOffset - start.X, y + yOffset - start.Y);	
+			 
+			//change later where point is key so lookup would be 01 and handle in main render loop 
 			foreach(Point p in player.viewHandler.viewedPoints) {
 				int x = p.X + xOffset - start.X, y = p.Y + yOffset - start.Y;
 				if(y >= 0 && x >= 0 && x < screenSize.X && y < screenSize.Y)

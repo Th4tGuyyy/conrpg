@@ -1,5 +1,6 @@
 ﻿using ConsoleGameEngine;
 using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace rpgtest2020
@@ -22,20 +23,31 @@ namespace rpgtest2020
 
 			Engine.SetPalette(Palettes.Default);
 			//Engine.Borderless();
-			Console.Title = "Test";
+
 			TargetFramerate = 100;
-			//Engine.SetBackground(Palettes.DARK_CYAN);
+
 
 			GameData.GAME = this;
 			GameData.VConsole.gameHandle = this;
+
 			GameData.VConsole.writeLine("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLGMOPeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
 
-			//String k = "outside.text"
-			GameData.allLevels.Add("outside.txt",new Level("outside.txt"));
-			GameData.allLevels.Add("inside.txt", new Level("inside.txt"));
+			//loops thru maps folder and adds the maps if valid
+			String[] maps = Directory.GetFiles(GameData.MAPSLOCATION);
+			for(int i =0; i< maps.Length; i++) {
+				String fileName = Path.GetFileName(maps[i]);
 
-			GameData.allLevels["outside.txt"].loadLevel();
-			GameData.allLevels["inside.txt"].loadLevel();
+				if(fileName.Substring(fileName.Length-4,4) != ".txt")
+					throw new Exception(fileName.Substring(fileName.Length - 4, 4));
+
+				GameData.allLevels.Add(fileName, new Level(fileName));
+			}
+			//GameData.allLevels.Add("outside.txt",new Level("outside.txt"));
+			//GameData.allLevels.Add("inside.txt", new Level("inside.txt"));
+
+			foreach(KeyValuePair<string, Level> obj in GameData.allLevels)
+				obj.Value.loadLevel();
+
 
 			GameData.player.level = GameData.allLevels["outside.txt"];
 		}
