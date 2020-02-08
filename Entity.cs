@@ -70,13 +70,13 @@ namespace rpgtest2020
 			this.attack = new CharacterStat(attack);
 
 			updateTimer = new Timer(this.moveSpeed.Value);
-			viewHandler = new ViewRangeHandler(5);//range
+			viewHandler = new ViewRangeHandler(10);//range
 		}
 
 		public override void update()
 		{
 			if(updateTimer.complete()) {
-				updateTimer.start();
+				//updateTimer.start();
 				randomMove();
 				updateViewRange();
 			}

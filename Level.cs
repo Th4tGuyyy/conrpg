@@ -27,14 +27,13 @@ namespace rpgtest2020
 		
 		public void loadLevel()//time reminant might be caused if mutliple player spawns?
 		{
-			try {
+
 				StreamReader sr = new StreamReader(path);
 
 				String[] dimensions = sr.ReadLine().Split(new char[] { ' ' });
 				WIDTH = Convert.ToInt32(dimensions[0]);
 				HEIGHT = Convert.ToInt32(dimensions[1]);
 
-				//world = new Glyph[WIDTH, HEIGHT];
 				world = new Tile[WIDTH, HEIGHT];
 
 				for(int y = 0; y < HEIGHT; y++) {
@@ -45,9 +44,8 @@ namespace rpgtest2020
 					}
 				}
 				sr.Close();
-			}
-			catch {
-			}
+
+
 		}
 
 		private Glyph deHash(String hash, Point loc)
@@ -55,6 +53,7 @@ namespace rpgtest2020
 			//0=char 1=color 2=meta
 			String[] hex = hash.Split(",");
 
+			//converts hex to info
 			int iPosHex = Convert.ToInt32(hex[0] + "", 16);
 
 			int fgColor = Convert.ToInt32(hex[1][0] + "", 16);
@@ -62,13 +61,13 @@ namespace rpgtest2020
 
 			String str = (char)AsciiTable.table[iPosHex] + "";
 
-			//Console.Title = $"pos: {iPosHex} , converted: {str}";
+			//creats glyph
 			Glyph newGlyph = new Glyph(str + "", fgColor, bgColor);
 
 			int metaData = Convert.ToInt32(hex[2] + "", 16);
 			if(metaData != 0) {
 				try {
-					StreamReader sr = new StreamReader(GameData.METALOCATION + metaData + ".txt");
+					StreamReader sr = new StreamReader(METALOCATION + metaData + ".txt");
 					String catagory = sr.ReadLine().ToLower();
 
 					if(catagory == "teleport") {
@@ -76,14 +75,13 @@ namespace rpgtest2020
 						int tpX = Convert.ToInt32(sr.ReadLine());
 						int tpY = Convert.ToInt32(sr.ReadLine());
 
-						//Teleporter tp =  new Teleporter(this, loc, Program.allLevels[levelName], new Point(tpX, tpY));
 
 						world[loc.X, loc.Y].topObject = new Teleporter(this, loc, GameData.allLevels[levelName], new Point(tpX, tpY));
 					}
 					else if(catagory == "player")//224
 					{
-						//player = new Player(this, "Bobby", new Glyph("@", Palettes.DARK_BLUE), loc, 10);
-						if(player != null) {
+
+						if(player.level == this) {
 							player.hardSetLocation(loc);
 							world[loc.X, loc.Y].topObject = player;
 						}
@@ -91,8 +89,8 @@ namespace rpgtest2020
 					else if(catagory == "goblin")//2
 					{
 						Entity gbl = new Entity(this, loc);
-						Random r = new Random();
-						gbl.setStats(new Glyph("G", Palettes.DARK_RED), 10, 0.25f, 10, 10, 10, 10);
+						//Random r = new Random();
+						gbl.setStats(new Glyph("G", Palettes.DARK_RED), 10, 2f, 10, 10, 10, 10);
 
 						world[loc.X, loc.Y].topObject = gbl;
 					}
@@ -101,11 +99,14 @@ namespace rpgtest2020
 						world[loc.X, loc.Y].isTransparent = false;
 					}
 					else {
+						throw new Exception("meta data went fucky wucky: " + metaData);
 					}
+					sr.Close();
 				}
 				catch(Exception e) {
 					StreamWriter sw = new StreamWriter(GameData.METALOCATION + "Error.txt");
 					sw.WriteLine(e);
+					sw.WriteLine(e.InnerException);
 					sw.Close();
 				}
 			}

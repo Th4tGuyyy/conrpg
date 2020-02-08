@@ -1,38 +1,58 @@
 ﻿using ConsoleGameEngine;
 using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace rpgtest2020
 {
 	internal class VirtualConsole
 	{
-		public readonly Point topLeft;
-		public readonly Point bottomRight;
+		public readonly Rect bounds;
 
 		private Queue<String> textBuffer;
 		private readonly int maxHeight;
 		private readonly int maxWidth;
 
-		public ConsoleGame gameHandle;
+		//public ConsoleGame GameData.GAME;
 
-		public VirtualConsole(int x, int y, int width, int height)
+		public bool READING = false;
+
+		InputBox inputBox;
+		bool enableInput = true;
+
+		public VirtualConsole(int x, int y, int width, int height, int inputSize = 2)
 		{
-			topLeft = new Point(x, y);
-			bottomRight = new Point(x + width, y + height);
+			Point topLeft = new Point(x, y);
+			Point bottomRight = new Point(x + width, y + height- inputSize);
+			bounds = new Rect(topLeft,bottomRight);
 
-			maxHeight = height - 1;
-			maxWidth = width - 1;
+			maxHeight = height - 1- inputSize;
+			maxWidth = width - 1- inputSize;
 
 			textBuffer = new Queue<string>();
+
+			inputBox = new InputBox(x, y+height- inputSize, width, inputSize);
 		}
+
 
 		public void render()
 		{
-			gameHandle.Engine.Frame(topLeft, bottomRight, Palettes.DARK_GRAY);
+			GameData.GAME.Engine.Frame(bounds.topLeft, bounds.bottomRight, GameData.UICOLOR);
+
+			if(enableInput)
+				inputBox.render();
+
+
 
 			String[] arr = textBuffer.ToArray();
 			for(int i = 0; i < arr.Length; i++)
-				gameHandle.Engine.WriteText(new Point(topLeft.X + 1, topLeft.Y + 1 + i), arr[i], Palettes.GRAY);
+				GameData.GAME.Engine.WriteText(new Point(bounds.topLeft.X + 1, bounds.topLeft.Y + 1 + i), arr[i], Palettes.GRAY);
+		}
+
+		public void update()
+		{
+			if(enableInput)
+				inputBox.update();
 		}
 
 		public void writeLine(String text)
@@ -49,5 +69,11 @@ namespace rpgtest2020
 					textBuffer.Dequeue();
 			}
 		}
+
+		public void switchState()
+		{
+			READING = !READING;
+		}
+
 	}
 }

@@ -5,46 +5,63 @@ namespace rpgtest2020
 {
 	internal class KeyboardHandler : GameData
 	{
-		private class Node
+		private class keyNode
 		{
 			public ConsoleKey key;
 			public Action action;
 			public Timer timer;
+			public bool keyDown;
 
-			//public Node next;
+			public keyNode next;
 
-			public Node(ConsoleKey key, Action action, Timer timer)
+			public keyNode(ConsoleKey key, Action action, Timer timer,bool keydown)
 			{
 				this.key = key;
 				this.action = action;
 				this.timer = timer;
+				this.keyDown = keydown;
 			}
 		}
 
-		private List<Node> keyList = new List<Node>();
+		private keyNode top;
 
-		public void add(ConsoleKey key, Action action, Timer timer)
+		public void add(ConsoleKey key, Action action, Timer timer, bool keydown = false)
 		{
-			keyList.Add(new Node(key, action, timer));
+			keyNode newNode = new keyNode(key, action, timer,keydown);
+			newNode.next = top;
+			top = newNode;
 		}
 
-		public void add(ConsoleKey key, Action action, float cooldown)
+		public void add(ConsoleKey key, Action action, float cooldown, bool keydown = false)
 		{
-			add(key, action, new Timer(cooldown));
+			add(key, action, new Timer(cooldown),keydown);
 		}
 
+		/// <summary>loops thru the keys and checks logic if pressed, if so do its action</summary>
+		/// <returns>returns if ANY action has occured from a keypress</returns>
 		public bool handle()
 		{
 			bool action = false;
 
-			for(int i = 0; i < keyList.Count; i++) {
-				if(GAME.Engine.GetKey(keyList[i].key) && keyList[i].timer.complete()) {
-					keyList[i].timer.start();
-					keyList[i].action();
+			keyNode cur = top;
+			while(cur != null) {
+				bool pressed;
+
+				if(!cur.keyDown)
+					pressed = GAME.Engine.GetKey(cur.key);
+				else
+					pressed = GAME.Engine.GetKeyDown(cur.key);
+
+
+				if(pressed && cur.timer.complete()) {
+					cur.timer.start();
+					cur.action();
 					action = true;
 				}
 
-				keyList[i].timer.update();
+				cur.timer.update();
+
+				cur = cur.next;
 			}
 
 			return action;

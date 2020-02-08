@@ -7,9 +7,11 @@ namespace rpgtest2020
 {
 	internal class Program : ConsoleGame
 	{
-		private const int PIXEL_SIZE = 20;
+		private const int PIXEL_SIZE = 16;
 		private const int WINDOW_WIDTH = 36;
 		private const int WINDOW_HEIGHT = 33;
+
+		private KeyboardHandler gameKeys;
 
 		private static void Main(string[] args)
 		{
@@ -24,11 +26,15 @@ namespace rpgtest2020
 			Engine.SetPalette(Palettes.Default);
 			//Engine.Borderless();
 
-			TargetFramerate = 30;
+			gameKeys = new KeyboardHandler();
+
+			gameKeys.add(ConsoleKey.Enter, () => GameData.VConsole.switchState(), 0.5f);
+
+			TargetFramerate = 60;
 
 
 			GameData.GAME = this;
-			GameData.VConsole.gameHandle = this;
+			//GameData.VConsole.gameHandle = this;
 
 			GameData.VConsole.writeLine("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLGMOPeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
 
@@ -38,34 +44,34 @@ namespace rpgtest2020
 				String fileName = Path.GetFileName(maps[i]);
 
 				if(fileName.Substring(fileName.Length-4,4) != ".txt")
-					throw new Exception(fileName.Substring(fileName.Length - 4, 4));
+					throw new Exception(fileName.Substring(fileName.Length - 4, 4) + "is not a valid file type");
 
 				GameData.allLevels.Add(fileName, new Level(fileName));
 			}
-			//GameData.allLevels.Add("outside.txt",new Level("outside.txt"));
-			//GameData.allLevels.Add("inside.txt", new Level("inside.txt"));
+
+
+			GameData.player.level = GameData.allLevels["openworld.txt"];
 
 			foreach(KeyValuePair<string, Level> obj in GameData.allLevels)
 				obj.Value.loadLevel();
 
 
-			GameData.player.level = GameData.allLevels["outside.txt"];
 		}
 
 		public override void Render()
 		{
 			Engine.ClearBuffer();
 
-			if(GameData.currentGameState == GameData.GameState.RUNNING)
+			if(GameData.currentGameState != GameData.GameState.STOP)
 				GameData.player.level.render();
 
 			//player.render();
 			GameData.VConsole.render();
-			Engine.Frame(new Point(20, 0), new Point(35, 20), Palettes.DARK_GRAY);
+			Engine.Frame(new Point(20, 0), new Point(35, 20), Palettes.DARK_GRAY);//temp menu frame
 
-			Engine.Frame(new Point(0, 0), new Point(20, 20), Palettes.DARK_GRAY);
+			Engine.Frame(new Point(0, 0), new Point(20, 20), Palettes.DARK_GRAY);//frame around game
 
-			Engine.Frame(new Point(0, 30), new Point(35, 32), Palettes.DARK_GRAY);
+			//Engine.Frame(new Point(0, 30), new Point(35, 32), Palettes.DARK_GRAY);//temp input frame
 
 			Engine.DisplayBuffer();
 		}
@@ -74,11 +80,14 @@ namespace rpgtest2020
 		{
 			Console.Title = "FPS: " + Math.Floor(GetFramerate());
 
-			//handleKeyDown();
-			//player.update();
-			//GameData.currentLevel.update();
-			if(GameData.currentGameState == GameData.GameState.RUNNING)
+			
+			gameKeys.handle();
+
+			if(!GameData.VConsole.READING)
 				GameData.player.level.update();
+			else
+				GameData.VConsole.update();
+
 		}
 	}
 }

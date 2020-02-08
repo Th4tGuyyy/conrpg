@@ -12,9 +12,7 @@
 			this.coolDown = coolDown; start();
 		}
 
-		/// <summary>
-		/// Expected to get called every frame, increacements timer
-		/// </summary>
+		/// <summary>Expected to get called every frame, increacements timer</summary>
 		public void update()
 		{
 			if(timer > 0f && canCount)
@@ -23,13 +21,15 @@
 				stop();
 		}
 
-		/// <summary>
-		/// returns if the timer is complete(stopped running)
-		/// </summary>
+		/// <summary>returns if the timer is complete(stopped running), if so it restarts the timer</summary>
 		/// <returns>timer <=0 </returns>
 		public bool complete()
 		{
-			return timer <= 0;
+			if(timer <= 0) {
+				start();
+				return true;
+			}
+			return false;
 		}
 
 		/// <summary>starts timer, or restarts it</summary>
