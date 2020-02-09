@@ -55,7 +55,7 @@ namespace rpgtest2020
 		private RangeList bannedRadients = new RangeList();
 		public List<Point> viewedPoints;
 
-		private int viewRange = 5;
+		private int viewRange;
 		private static double margin = 0.05;
 		private static double radStep = 0.05;//0.05
 		private static double radStart = 0.00000001;
@@ -115,6 +115,16 @@ namespace rpgtest2020
 			}
 
 			return viewedPoint;
+		}
+
+		public int getRange()
+		{
+			return viewRange;
+		}
+
+		public void setRange(int newRange)
+		{
+			viewRange = newRange;
 		}
 	}
 }

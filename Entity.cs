@@ -49,8 +49,10 @@ namespace rpgtest2020
 		protected Timer updateTimer;
 		protected Random random;
 
-		private ViewRangeHandler viewHandler;
+		protected ViewRangeHandler viewHandler;
 		private List<Point> lastViewedPoints = new List<Point>();
+
+		protected int lastUpdatedFrame;
 
 		public Entity(Level owner, Point location)
 		{
@@ -75,10 +77,11 @@ namespace rpgtest2020
 
 		public override void update()
 		{
-			if(updateTimer.complete()) {
+			if(updateTimer.complete() && lastUpdatedFrame != GAME.FrameTotal) {
 				//updateTimer.start();
 				randomMove();
 				updateViewRange();
+				lastUpdatedFrame = GAME.FrameTotal;
 			}
 
 			updateTimer.update();
@@ -160,5 +163,7 @@ namespace rpgtest2020
 		{
 			return viewHandler.viewedPoints.Contains(new Point(x, y));
 		}
+
+
 	}
 }

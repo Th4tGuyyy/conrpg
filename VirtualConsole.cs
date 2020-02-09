@@ -66,7 +66,8 @@ namespace rpgtest2020
 			}
 			else if(!READING && inputBox.getInput().Length >0) {
 				inputBox.update();
-				writeLine(inputBox.getInput());
+				if(!CommandHandler.tryCommand(inputBox.getInput()))
+					writeLine(inputBox.getInput());
 				inputBox.clear();
 			}
 
@@ -88,9 +89,20 @@ namespace rpgtest2020
 			}
 		}
 
+		public void clear()
+		{
+			textBuffer.Clear();
+		}
+
 		public void switchState()
 		{
 			READING = !READING;
+		}
+
+		public void switchStateAndSlash()
+		{
+			READING = !READING;
+			inputBox.addText("/");
 		}
 
 	}

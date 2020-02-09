@@ -29,7 +29,8 @@ namespace rpgtest2020
 
 			gameKeys = new KeyboardHandler();
 
-			gameKeys.add(ConsoleKey.Enter, () => GameData.VConsole.READING = !GameData.VConsole.READING, 0.5f);
+			gameKeys.add(ConsoleKey.Enter, () => GameData.VConsole.switchState(), 0.5f);
+			gameKeys.add(0xBF, () => GameData.VConsole.switchStateAndSlash(), 0.5f);
 
 			TargetFramerate = 60;
 

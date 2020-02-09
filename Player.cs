@@ -8,6 +8,8 @@ namespace rpgtest2020
 		private readonly KeyboardHandler keyHandler;
 		private readonly KeyboardHandler movementKeys;
 
+		public bool forceUpdate = false;
+
 		public Player(Level owner, String name, Glyph sprite, Point loc, int health) : base(owner, loc)
 		{
 			this.name = name;
@@ -15,7 +17,7 @@ namespace rpgtest2020
 			this.health = health;
 			this.sprite = sprite;
 
-			setStats(new Glyph("@", Palettes.DARK_CYAN), 10, 1f, 0, 0, 0, 0);//temp
+			setStats(new Glyph("@", Palettes.DARK_CYAN), 10, 1.6f, 0, 0, 0, 0);//temp
 
 			keyHandler = new KeyboardHandler();
 			movementKeys = new KeyboardHandler();
@@ -37,9 +39,11 @@ namespace rpgtest2020
 			bool playerMoved = movementKeys.handle();
 			keyHandler.handle();
 
-			if(playerMoved) {
+			if((playerMoved && lastUpdatedFrame != GAME.FrameTotal) || forceUpdate) {
 				updateViewRange();
 				say(location.ToString());
+				forceUpdate = false;
+				lastUpdatedFrame = GAME.FrameTotal;
 			}
 		}
 
@@ -47,6 +51,13 @@ namespace rpgtest2020
 		{
 			Random r = new Random();
 			return r.Next(0, 100);
+		}
+
+		public void setViewRange(int newRange)
+		{
+			viewHandler.setRange(newRange);
+			forceUpdate = true;
+
 		}
 	}
 }

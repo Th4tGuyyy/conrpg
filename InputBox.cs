@@ -49,6 +49,17 @@ namespace rpgtest2020
 			keys.add(ConsoleKey.B, () => handleKey("b"), inputDelay,true);
 			keys.add(ConsoleKey.N, () => handleKey("n"), inputDelay,true);
 			keys.add(ConsoleKey.M, () => handleKey("m"), inputDelay,true);
+
+			keys.add(ConsoleKey.D0, () => handleKey("0"), inputDelay, true);
+			keys.add(ConsoleKey.D1, () => handleKey("1"), inputDelay, true);
+			keys.add(ConsoleKey.D2, () => handleKey("2"), inputDelay, true);
+			keys.add(ConsoleKey.D3, () => handleKey("3"), inputDelay, true);
+			keys.add(ConsoleKey.D4, () => handleKey("4"), inputDelay, true);
+			keys.add(ConsoleKey.D5, () => handleKey("5"), inputDelay, true);
+			keys.add(ConsoleKey.D6, () => handleKey("6"), inputDelay, true);
+			keys.add(ConsoleKey.D7, () => handleKey("7"), inputDelay, true);
+			keys.add(ConsoleKey.D8, () => handleKey("8"), inputDelay, true);
+			keys.add(ConsoleKey.D9, () => handleKey("9"), inputDelay, true);
 			#endregion
 
 			keys.add(0xBF,() => handleKey("/"), inputDelay, true);
@@ -93,6 +104,11 @@ namespace rpgtest2020
 		public void clear()
 		{
 			input = "";
+		}
+
+		public void addText(String text)
+		{
+			input += text;
 		}
 
 	}
