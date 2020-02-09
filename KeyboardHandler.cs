@@ -7,14 +7,14 @@ namespace rpgtest2020
 	{
 		private class keyNode
 		{
-			public ConsoleKey key;
+			public int key;//changed from consolekey
 			public Action action;
 			public Timer timer;
 			public bool keyDown;
 
 			public keyNode next;
 
-			public keyNode(ConsoleKey key, Action action, Timer timer,bool keydown)
+			public keyNode(int key, Action action, Timer timer,bool keydown)
 			{
 				this.key = key;
 				this.action = action;
@@ -25,16 +25,25 @@ namespace rpgtest2020
 
 		private keyNode top;
 
-		public void add(ConsoleKey key, Action action, Timer timer, bool keydown = false)
+		public void add(int key, Action action, Timer timer, bool keydown = false)
 		{
-			keyNode newNode = new keyNode(key, action, timer,keydown);
+			keyNode newNode = new keyNode(key, action, timer, keydown);
 			newNode.next = top;
 			top = newNode;
 		}
 
+		public void add(int key, Action action, float cooldown, bool keydown = false)
+		{
+			add(key, action, new Timer(cooldown), keydown);
+		}
+		public void add(ConsoleKey key, Action action, Timer timer, bool keydown = false)
+		{
+			add((int)key, action, timer, keydown);
+		}
+
 		public void add(ConsoleKey key, Action action, float cooldown, bool keydown = false)
 		{
-			add(key, action, new Timer(cooldown),keydown);
+			add((int)key, action, new Timer(cooldown),keydown);
 		}
 
 		/// <summary>loops thru the keys and checks logic if pressed, if so do its action</summary>

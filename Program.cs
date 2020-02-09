@@ -25,15 +25,15 @@ namespace rpgtest2020
 
 			Engine.SetPalette(Palettes.Default);
 			//Engine.Borderless();
+			GameData.GAME = this;
 
 			gameKeys = new KeyboardHandler();
 
-			gameKeys.add(ConsoleKey.Enter, () => GameData.VConsole.switchState(), 0.5f);
+			gameKeys.add(ConsoleKey.Enter, () => GameData.VConsole.READING = !GameData.VConsole.READING, 0.5f);
 
 			TargetFramerate = 60;
 
 
-			GameData.GAME = this;
 			//GameData.VConsole.gameHandle = this;
 
 			GameData.VConsole.writeLine("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLGMOPeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
@@ -85,8 +85,9 @@ namespace rpgtest2020
 
 			if(!GameData.VConsole.READING)
 				GameData.player.level.update();
-			else
-				GameData.VConsole.update();
+			
+
+			GameData.VConsole.update();
 
 		}
 	}

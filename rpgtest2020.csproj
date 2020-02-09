@@ -15,7 +15,7 @@
 
   <ItemGroup>
     <Reference Include="ConsoleGameEngine">
-      <HintPath>D:\Desktop\C# Librarys\ConsoleGameEngine-master\ConsoleGameEngine-master\Source\bin\Debug\ConsoleGameEngine.dll</HintPath>
+      <HintPath>ConsoleGameEngine.dll</HintPath>
     </Reference>
     <Reference Include="ExtendedAscii">
       <HintPath>D:\Desktop\C# Librarys\ExtendedAscii\ExtendedAscii\bin\Debug\ExtendedAscii.dll</HintPath>

@@ -7,9 +7,9 @@ namespace rpgtest2020
 {
 	class InputBox
 	{
-		readonly Rect bounds;
+		public Rect bounds;
 
-		float inputDelay = 0.05f;
+		float inputDelay = 0.005f;
 		String input = "";//change to string builder
 		int maxWidth;
 
@@ -51,6 +51,7 @@ namespace rpgtest2020
 			keys.add(ConsoleKey.M, () => handleKey("m"), inputDelay,true);
 			#endregion
 
+			keys.add(0xBF,() => handleKey("/"), inputDelay, true);
 			keys.add(ConsoleKey.Spacebar,() => handleKey(" "),inputDelay,true);
 			keys.add(ConsoleKey.Backspace, () => handleKey("bks"), inputDelay,true);
 		}
@@ -63,12 +64,13 @@ namespace rpgtest2020
 			if(startPos < 0)
 				startPos = 0;
 
-			GameData.GAME.Engine.WriteText(bounds.topLeft + new Point(1, 1), input[startPos..], GameData.UICOLOR);//text[maxWidth..]
+			GameData.GAME.Engine.WriteText(bounds.topLeft +1, input[startPos..], GameData.UICOLOR);
 		}
 
 		public void update()
 		{
 			keys.handle();
+			
 		}
 
 		public void handleKey(String key)
@@ -79,9 +81,18 @@ namespace rpgtest2020
 					input = input.Substring(0, input.Length - 1);
 			}
 			else {
-				//if(input.Length < maxWidth)
-					input += key;
+				input += key;
 			}
+		}
+
+		public String getInput()
+		{
+			return input;
+		}
+
+		public void clear()
+		{
+			input = "";
 		}
 
 	}
