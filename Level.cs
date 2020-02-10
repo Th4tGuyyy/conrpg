@@ -8,10 +8,11 @@ namespace rpgtest2020
 {
 	internal class Level : GameData
 	{
-		private static int xOffset = 0;
-		private static int yOffset = 0;
-		private static int viewSize = 20;
-		private static Point screenSize = new Point(20, 20);
+
+		private static int xOffset = 1;
+		private static int yOffset = 1;
+		private static int viewSize = 25;
+		//private static Point screenSize = new Point(20, 20);
 
 
 		private int HEIGHT, WIDTH;
@@ -124,18 +125,20 @@ namespace rpgtest2020
 
 		public void render()
 		{
+			GAME.Engine.Frame(new Point(xOffset-1, yOffset-1), new Point(viewSize+1, viewSize+1), UICOLOR);//frame around game
+
 			Point start = new Point(player.getLocation().X - viewSize / 2, player.getLocation().Y - viewSize / 2);
 			Point end = new Point(player.getLocation().X + viewSize / 2, player.getLocation().Y + viewSize / 2);
 			//world xy are based off player,
-			for(int y = start.Y; y < end.Y; y++)
-				for(int x = start.X; x < end.X; x++)
+			for(int y = start.Y; y < end.Y+1; y++)
+				for(int x = start.X; x < end.X+1; x++)
 					if(x >= 0 && y >= 0 && x < WIDTH && y < HEIGHT)
 						world[x, y].renderHidden(x + xOffset - start.X, y + yOffset - start.Y);	
 			 
 			//change later where point is key so lookup would be 01 and handle in main render loop 
 			foreach(Point p in player.getLastViewPoints()/*player.viewHandler.viewedPoints*/) {
 				int x = p.X + xOffset - start.X, y = p.Y + yOffset - start.Y;
-				if(y >= 0 && x >= 0 && x < screenSize.X && y < screenSize.Y)
+				if(y > 0 && x > 0 && x < viewSize && y < viewSize)
 					world[p.X, p.Y].render(x, y);
 			}
 			//render world and entites

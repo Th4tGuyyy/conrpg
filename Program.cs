@@ -8,8 +8,8 @@ namespace rpgtest2020
 	internal class Program : ConsoleGame
 	{
 		private const int PIXEL_SIZE = 16;
-		private const int WINDOW_WIDTH = 36;
-		private const int WINDOW_HEIGHT = 33;
+		private const int WINDOW_WIDTH = 40;
+		private const int WINDOW_HEIGHT = 37;
 
 		private KeyboardHandler gameKeys;
 
@@ -63,16 +63,17 @@ namespace rpgtest2020
 		{
 			Engine.ClearBuffer();
 
-			if(GameData.currentGameState != GameData.GameState.STOP)
-				GameData.player.level.render();
+			
 
 			//player.render();
 			GameData.VConsole.render();
 			Engine.Frame(new Point(20, 0), new Point(35, 20), Palettes.DARK_GRAY);//temp menu frame
 
-			Engine.Frame(new Point(0, 0), new Point(20, 20), Palettes.DARK_GRAY);//frame around game
 
 			//Engine.Frame(new Point(0, 30), new Point(35, 32), Palettes.DARK_GRAY);//temp input frame
+
+			if(GameData.currentGameState != GameData.GameState.STOP)
+				GameData.player.level.render();
 
 			Engine.DisplayBuffer();
 		}
