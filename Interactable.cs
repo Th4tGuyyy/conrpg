@@ -11,6 +11,12 @@ namespace rpgtest2020
 
 		public virtual void update()
 		{
+
+		}
+
+		public virtual void onInteract(Entity activator)
+		{
+
 		}
 	}
 }

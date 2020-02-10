@@ -32,7 +32,7 @@ namespace rpgtest2020
 			gameKeys.add(ConsoleKey.Enter, () => GameData.VConsole.switchState(), 0.5f);
 			gameKeys.add(0xBF, () => GameData.VConsole.switchStateAndSlash(), 0.5f);
 
-			TargetFramerate = 60;
+			TargetFramerate = 100;
 
 
 			//GameData.VConsole.gameHandle = this;

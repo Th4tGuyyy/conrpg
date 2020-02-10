@@ -41,7 +41,7 @@ namespace rpgtest2020
 
 			if((playerMoved && lastUpdatedFrame != GAME.FrameTotal) || forceUpdate) {
 				updateViewRange();
-				say(location.ToString());
+				//say(location.ToString());
 				forceUpdate = false;
 				lastUpdatedFrame = GAME.FrameTotal;
 			}

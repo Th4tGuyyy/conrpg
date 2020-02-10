@@ -12,16 +12,10 @@ namespace rpgtest2020
 		//lvl = based off stats
 		//location
 
-
 		protected String name;
 		protected int health;
 
-		protected CharacterStat maxHealth;
-		protected CharacterStat moveSpeed;
-		protected CharacterStat agility;
-		protected CharacterStat defence;
-		protected CharacterStat strength;
-		protected CharacterStat attack;
+
 
 		protected Timer updateTimer;
 		protected Random random;
@@ -41,15 +35,10 @@ namespace rpgtest2020
 		{
 			this.sprite = sprite;
 
-			this.maxHealth = new CharacterStat(maxHealth);
-			this.moveSpeed = new CharacterStat(moveSpeed);
-			this.agility = new CharacterStat(agility);
-			this.defence = new CharacterStat(defence);
-			this.strength = new CharacterStat(strength);
-			this.attack = new CharacterStat(attack);
 
-			updateTimer = new Timer(this.moveSpeed.Value);
+			updateTimer = new Timer(moveSpeed);
 			viewHandler = new ViewRangeHandler(10);//range
+
 		}
 
 		public override void update()
@@ -62,6 +51,12 @@ namespace rpgtest2020
 			}
 
 			updateTimer.update();
+		}
+
+		public override void onInteract(Entity activator)//when player interacts with entity
+		{
+			//handle default interaction for entitys
+			kill();
 		}
 
 		public List<Point> getLastViewPoints()
@@ -91,13 +86,8 @@ namespace rpgtest2020
 			bool movedTile = false;
 
 			if(level.world[newLoc.X, newLoc.Y].topObject != null) {
-				//no move do logic
-				//VConsole.writeLine("Hit not a wall!");
-				if(level.world[newLoc.X, newLoc.Y].topObject is Teleporter) {
-					say("getting ready to Teleporting from entity");
-					Teleporter t = (Teleporter)level.world[newLoc.X, newLoc.Y].topObject;
-					t.teleport(this);
-				}
+
+				level.world[newLoc.X, newLoc.Y].topObject.onInteract(this);
 			}
 			else if(level.world[newLoc.X, newLoc.Y].isSolid) {
 				//VConsole.writeLine("Hit a wall!");
@@ -139,6 +129,17 @@ namespace rpgtest2020
 		public bool canSee(int x, int y)
 		{
 			return viewHandler.viewedPoints.Contains(new Point(x, y));
+		}
+
+		public void setSpeed(float newSpeed)
+		{
+			updateTimer.setCoolDown(newSpeed);
+			updateTimer.complete();
+		}
+
+		protected virtual void kill()
+		{
+			level.world[location.X, location.Y].topObject = null;	
 		}
 
 

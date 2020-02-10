@@ -62,6 +62,7 @@ namespace rpgtest2020
 			keys.add(ConsoleKey.D9, () => handleKey("9"), inputDelay, true);
 			#endregion
 
+			keys.add(0xBE, () => handleKey("."), inputDelay, true);
 			keys.add(0xBF,() => handleKey("/"), inputDelay, true);
 			keys.add(ConsoleKey.Spacebar,() => handleKey(" "),inputDelay,true);
 			keys.add(ConsoleKey.Backspace, () => handleKey("bks"), inputDelay,true);

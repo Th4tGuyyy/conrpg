@@ -23,14 +23,19 @@ namespace rpgtest2020
 			this.targetPoint = targetLocation;
 		}
 
+		public override void onInteract(Entity activator)
+		{
+			teleport(activator);
+		}
+
 		public void teleport(Entity entity)
 		{
-			entity.say("Teleporting");
+			//entity.say("Teleporting");
 
 			if(entity is Player) {
-				level.world[player.getLocation().X, player.getLocation().Y].topObject = null;//deletes player
-				player.level = targetLevel;
-				player.move(targetPoint);//moves player to targetlocation
+				level.world[entity.getLocation().X, entity.getLocation().Y].topObject = null;//deletes player
+				entity.level = targetLevel;
+				entity.move(targetPoint);//moves player to targetlocation
 			}
 		}
 

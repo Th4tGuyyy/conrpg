@@ -19,8 +19,24 @@ namespace rpgtest2020
 				happend = clearConsole();
 			if(words[0] == "/setview")
 				happend = changeRange(words);
+			if(words[0] == "/setspeed")
+				happend = setSpeed(words);
+			if(words[0] == "/loc")
+				happend = loc(words);
 
 			return happend;
+		}
+
+		private static bool loc(String[] words)
+		{
+			try {
+				player.say($"im at {player.getLocation().X} , {player.getLocation().Y}");
+				return true;
+			}
+			catch(Exception e) {
+				VConsole.writeLine("Error with command: " + e);
+				return false;
+			}
 		}
 
 		private static bool changeRange(String[] words)
@@ -28,6 +44,20 @@ namespace rpgtest2020
 			try {
 				int newRange = Convert.ToInt32(words[1]);
 				player.setViewRange(newRange);
+				return true;
+			}
+			catch(Exception e) {
+				VConsole.writeLine("Error with command: " + e);
+				return false;
+			}
+		}
+
+		private static bool setSpeed(String[] words)
+		{
+			try {
+				float newSpeed = float.Parse(words[1]);
+				player.setSpeed(newSpeed);
+			
 				return true;
 			}
 			catch(Exception e) {

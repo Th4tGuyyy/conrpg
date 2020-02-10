@@ -2,7 +2,7 @@
 {
 	internal class Timer : GameData
 	{
-		public readonly float coolDown;
+		private float coolDown;
 		private float timer;
 		private bool canCount = true;
 		private bool doOnce = false;
@@ -46,6 +46,18 @@
 			canCount = false;
 			doOnce = true;
 			timer = 0;
+		}
+
+		public bool setCoolDown(float newCoolDown)
+		{
+			bool changed = true;
+
+			if(newCoolDown > 0)
+				coolDown = newCoolDown;
+			else
+				changed = false;
+
+			return changed;
 		}
 	}
 }
