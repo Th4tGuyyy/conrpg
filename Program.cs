@@ -7,15 +7,11 @@ namespace rpgtest2020
 {
 	internal class Program : ConsoleGame
 	{
-		private const int PIXEL_SIZE = 16;
-		private const int WINDOW_WIDTH = 40;
-		private const int WINDOW_HEIGHT = 37;
-
 		private KeyboardHandler gameKeys;
 
 		private static void Main(string[] args)
 		{
-			new Program().Construct(WINDOW_WIDTH, WINDOW_HEIGHT, PIXEL_SIZE, PIXEL_SIZE, FramerateMode.MaxFps);
+			new Program().Construct(GameData.WINDOW_WIDTH, GameData.WINDOW_HEIGHT, GameData.PIXEL_SIZE, GameData.PIXEL_SIZE, FramerateMode.MaxFps);
 		}
 
 		public override void Create()
@@ -24,7 +20,7 @@ namespace rpgtest2020
 				File.Delete(GameData.METALOCATION + "Error.txt");
 
 			Engine.SetPalette(Palettes.Default);
-			//Engine.Borderless();
+			Engine.Borderless();
 			GameData.GAME = this;
 
 			gameKeys = new KeyboardHandler();
@@ -63,17 +59,16 @@ namespace rpgtest2020
 		{
 			Engine.ClearBuffer();
 
-			
 
-			//player.render();
 			GameData.VConsole.render();
-			Engine.Frame(new Point(20, 0), new Point(35, 20), Palettes.DARK_GRAY);//temp menu frame
 
+			//Engine.Frame(new Point(20, 0), new Point(35, 20), Palettes.DARK_GRAY);//temp menu frame
+			GameData.statsPanel.render();
 
-			//Engine.Frame(new Point(0, 30), new Point(35, 32), Palettes.DARK_GRAY);//temp input frame
 
 			if(GameData.currentGameState != GameData.GameState.STOP)
 				GameData.player.level.render();
+
 
 			Engine.DisplayBuffer();
 		}
@@ -90,6 +85,8 @@ namespace rpgtest2020
 			
 
 			GameData.VConsole.update();
+
+			GameData.statsPanel.update();
 
 		}
 	}

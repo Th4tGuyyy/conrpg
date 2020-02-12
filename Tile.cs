@@ -13,6 +13,17 @@ namespace rpgtest2020
 		public bool isTransparent = true;
 		public Interactable topObject;
 
+
+		public bool tryUpdate()
+		{
+			if(topObject == null)
+				return false;
+			else
+				topObject.update();
+			return true;
+
+		}
+
 		/// <summary>Render glyph and topObject above</summary>
 		public void render(int x, int y)
 		{

@@ -25,10 +25,10 @@ namespace rpgtest2020
 
 			//Timer movement = new Timer(moveSpeed.Value);
 
-			movementKeys.add(ConsoleKey.D, () => move(location + new Point(1, 0)), updateTimer);
-			movementKeys.add(ConsoleKey.S, () => move(location + new Point(0, 1)), updateTimer);
-			movementKeys.add(ConsoleKey.W, () => move(location + new Point(0, -1)), updateTimer);
-			movementKeys.add(ConsoleKey.A, () => move(location + new Point(-1, 0)), updateTimer);
+			movementKeys.add(ConsoleKey.RightArrow, () => move(location + new Point(1, 0)), updateTimer);
+			movementKeys.add(ConsoleKey.DownArrow, () => move(location + new Point(0, 1)), updateTimer);
+			movementKeys.add(ConsoleKey.UpArrow, () => move(location + new Point(0, -1)), updateTimer);
+			movementKeys.add(ConsoleKey.LeftArrow, () => move(location + new Point(-1, 0)), updateTimer);
 
 			keyHandler.add(ConsoleKey.B, () => say(randomNum() + ""), 0.1f);
 			keyHandler.add(ConsoleKey.S, () => say("BEANS"), 3f);

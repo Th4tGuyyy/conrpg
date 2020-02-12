@@ -12,8 +12,8 @@ namespace rpgtest2020
 		//lvl = based off stats
 		//location
 
-		protected String name;
-		protected int health;
+		public String name;
+		public int health;
 
 
 

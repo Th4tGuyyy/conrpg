@@ -23,10 +23,25 @@ namespace rpgtest2020
 				happend = setSpeed(words);
 			if(words[0] == "/loc")
 				happend = loc(words);
+			if(words[0] == "/setcsize")
+				happend = setCon(words);
 
 			return happend;
 		}
 
+
+		private static bool setCon(String[] words)
+		{
+			try {
+				int newSize = Convert.ToInt32(words[1]);
+				GameData.levelViewSize = newSize;
+				return true;
+			}
+			catch(Exception e) {
+				VConsole.writeLine("Error with command: " + e);
+				return false;
+			}
+		}
 		private static bool loc(String[] words)
 		{
 			try {

@@ -1,19 +1,13 @@
 ﻿using ConsoleGameEngine;
 using ExtendedAscii;
 using System;
-using System.Collections.Generic;
 using System.IO;
 
 namespace rpgtest2020
 {
 	internal class Level : GameData
 	{
-
-		private static int xOffset = 1;
-		private static int yOffset = 1;
-		private static int viewSize = 25;
-		//private static Point screenSize = new Point(20, 20);
-
+		public static readonly Rect bounds = new Rect(levelXOffset-1,levelYOffset-1,levelViewSize+ levelXOffset + 1, levelViewSize+levelYOffset + 1);
 
 		private int HEIGHT, WIDTH;
 
@@ -25,28 +19,25 @@ namespace rpgtest2020
 		{
 			this.path = GameData.MAPSLOCATION + path;
 		}
-		
+
 		public void loadLevel()//time reminant might be caused if mutliple player spawns?
 		{
+			StreamReader sr = new StreamReader(path);
 
-				StreamReader sr = new StreamReader(path);
+			String[] dimensions = sr.ReadLine().Split(new char[] { ' ' });
+			WIDTH = Convert.ToInt32(dimensions[0]);
+			HEIGHT = Convert.ToInt32(dimensions[1]);
 
-				String[] dimensions = sr.ReadLine().Split(new char[] { ' ' });
-				WIDTH = Convert.ToInt32(dimensions[0]);
-				HEIGHT = Convert.ToInt32(dimensions[1]);
+			world = new Tile[WIDTH, HEIGHT];
 
-				world = new Tile[WIDTH, HEIGHT];
-
-				for(int y = 0; y < HEIGHT; y++) {
-					String[] line = sr.ReadLine().Split(" ");
-					for(int x = 0; x < WIDTH; x++) {
-						world[x, y] = new Tile();
-						world[x, y].glyph = deHash(line[x], new Point(x, y));
-					}
+			for(int y = 0; y < HEIGHT; y++) {
+				String[] line = sr.ReadLine().Split(" ");
+				for(int x = 0; x < WIDTH; x++) {
+					world[x, y] = new Tile();
+					world[x, y].glyph = deHash(line[x], new Point(x, y));
 				}
-				sr.Close();
-
-
+			}
+			sr.Close();
 		}
 
 		private Glyph deHash(String hash, Point loc)
@@ -76,12 +67,10 @@ namespace rpgtest2020
 						int tpX = Convert.ToInt32(sr.ReadLine());
 						int tpY = Convert.ToInt32(sr.ReadLine());
 
-
 						world[loc.X, loc.Y].topObject = new Teleporter(this, loc, GameData.allLevels[levelName], new Point(tpX, tpY));
 					}
 					else if(catagory == "player")//224
 					{
-
 						if(player.level == this) {
 							player.hardSetLocation(loc);
 							world[loc.X, loc.Y].topObject = player;
@@ -117,28 +106,28 @@ namespace rpgtest2020
 
 		public void update()
 		{
-			for(int y = 0; y < HEIGHT; y++) 
-				for(int x = 0; x < WIDTH; x++) 
-					if(x >= 0 && y >= 0 && x < WIDTH && y < HEIGHT && world[x, y].topObject != null) 
-						world[x, y].topObject.update();
+			for(int y = 0; y < HEIGHT; y++)
+				for(int x = 0; x < WIDTH; x++)
+					if(x >= 0 && y >= 0 && x < WIDTH && y < HEIGHT)
+						world[x, y].tryUpdate();
 		}
 
 		public void render()
 		{
-			GAME.Engine.Frame(new Point(xOffset-1, yOffset-1), new Point(viewSize+1, viewSize+1), UICOLOR);//frame around game
+			GAME.Engine.Frame(new Point(levelXOffset - 1, levelYOffset - 1), new Point(levelViewSize + 1, levelViewSize + 1), UICOLOR);//frame around game
 
-			Point start = new Point(player.getLocation().X - viewSize / 2, player.getLocation().Y - viewSize / 2);
-			Point end = new Point(player.getLocation().X + viewSize / 2, player.getLocation().Y + viewSize / 2);
+			Point start = new Point(player.getLocation().X - levelViewSize / 2, player.getLocation().Y - levelViewSize / 2);
+			Point end = new Point(player.getLocation().X + levelViewSize / 2, player.getLocation().Y + levelViewSize / 2);
 			//world xy are based off player,
-			for(int y = start.Y; y < end.Y+1; y++)
-				for(int x = start.X; x < end.X+1; x++)
+			for(int y = start.Y; y < end.Y + 1; y++)
+				for(int x = start.X; x < end.X + 1; x++)
 					if(x >= 0 && y >= 0 && x < WIDTH && y < HEIGHT)
-						world[x, y].renderHidden(x + xOffset - start.X, y + yOffset - start.Y);	
-			 
-			//change later where point is key so lookup would be 01 and handle in main render loop 
+						world[x, y].renderHidden(x + levelXOffset - start.X, y + levelYOffset - start.Y);
+
+			//change later where point is key so lookup would be 01 and handle in main render loop
 			foreach(Point p in player.getLastViewPoints()/*player.viewHandler.viewedPoints*/) {
-				int x = p.X + xOffset - start.X, y = p.Y + yOffset - start.Y;
-				if(y > 0 && x > 0 && x < viewSize && y < viewSize)
+				int x = p.X + levelXOffset - start.X, y = p.Y + levelYOffset - start.Y;
+				if(y > 0 && x > 0 && x < levelViewSize && y < levelViewSize)
 					world[p.X, p.Y].render(x, y);
 			}
 			//render world and entites
